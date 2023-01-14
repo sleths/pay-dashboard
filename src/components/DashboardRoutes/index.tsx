@@ -1,15 +1,14 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 
 const DashboardRoutes = () => {
   return (
     <Routes>
-    {/* {["campaigns", "/"].map((path, index) => (
-      <Route path={path} element={<CampaignsPage />} key={index} />
-    ))} */}
-    <Route path="/" element={<p>hi</p>} />
-  </Routes>
-  )
-}
+      {["dashboard", "/"].map((path, index) => (
+        <Route path={path} element={<p>hi</p>} key={index} />
+      ))}
+    </Routes>
+  );
+};
 
-export default DashboardRoutes
+export default DashboardRoutes;

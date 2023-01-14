@@ -1,68 +1,68 @@
+import { useState } from "react";
+import { RiHome5Line } from "react-icons/ri";
+import { HiOutlineReceiptTax } from "react-icons/hi";
+import { IoWalletOutline } from "react-icons/io5";
+import { FiActivity } from "react-icons/fi";
+import { ReactComponent as Logo } from "../../../assets/logo.svg";
 import Sider from "antd/es/layout/Sider";
-import Menu from "antd/es/menu";
-import { Link } from "react-router-dom";
-import { ReactComponent as HomeOtlined } from "../../../assets/icons/homeOutlined.svg";
-import { ReactComponent as InvoiceOutlined } from "../../../assets/icons/invoiceOutlined.svg";
-import { ReactComponent as WalletOutlined } from "../../../assets/icons/walletOutlined.svg";
-import { ReactComponent as ActivityOutlined } from "../../../assets/icons/activityOutlined.svg";
-import SubMenu from "antd/es/menu/SubMenu";
-import DashboardMenuItem from "../DashboardMenuItem";
+import Menu, { MenuProps } from "antd/es/menu";
+import { Link, useNavigate } from "react-router-dom";
+
+import styles from "../styles.module.scss";
+
+type MenuItem = Required<MenuProps>["items"][number];
+
+function getItem(
+  label: React.ReactNode,
+  key?: React.Key | null,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  link?: string,
+  type?: "group"
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
+}
 
 const DashboardSider = () => {
-  const menuItems = [
-    {
-      link: "/",
-      key: "dashboard",
-      icon: <HomeOtlined />,
-    },
-    {
-      link: "/invoices",
-      key: "invoices",
-      icon: <InvoiceOutlined />,
-    },
-    {
-      link: "/wallet",
-      key: "wallet",
-      icon: <WalletOutlined />,
-    },
-    {
-      link: "/activity",
-      key: "activity",
-      icon: <ActivityOutlined />,
-      sub: true,
-      children: [
-        {
-          key: "transactions",
-          link: "/admin/transactions",
-        },
-        {
-          key: "coupons",
-          link: "/admin/coupons",
-        },
-      ],
-    },
+  const [selectedKey, setSelectedKey] = useState<string>("dashboard");
+
+  let navigate = useNavigate();
+
+  const items: MenuItem[] = [
+    getItem("Dashboard", "dashboard", <RiHome5Line />),
+    getItem("Invoices", "invoices", <HiOutlineReceiptTax />),
+    getItem("Wallet", "wallet", <IoWalletOutline />),
+
+    getItem("Activity", "activity", <FiActivity />, [
+      getItem("Transactions", "transactions"),
+      getItem("Recipients", "recipients"),
+    ]),
   ];
 
+  const handleClick: MenuProps["onClick"] = ({ key }) => {
+    setSelectedKey(key);
+    navigate(`/${key}`);
+  };
+
   return (
-    <Sider breakpoint="lg" collapsedWidth="0">
-      <div className="logo" />
+    <Sider breakpoint="lg" collapsedWidth="0" width={250} theme="light">
+      <Link to="/" className={`flex ${styles.logo}`}>
+        <Logo />
+      </Link>
       <Menu
         /* theme="dark" */
         mode="inline"
-        defaultSelectedKeys={["4"]}
-      >
-        {menuItems.map((i) =>
-          i.sub ? (
-            <SubMenu key={i.key} icon={i.icon} title={i.key}>
-              {i.children.map((x) => (
-                <DashboardMenuItem item={x} sub={true} />
-              ))}
-            </SubMenu>
-          ) : (
-            <DashboardMenuItem item={i} sub={false} />
-          )
-        )}
-      </Menu>
+        defaultSelectedKeys={[selectedKey]}
+        selectedKeys={[selectedKey]}
+        onClick={handleClick}
+        items={items}
+      />
     </Sider>
   );
 };

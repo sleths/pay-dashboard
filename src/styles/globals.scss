@@ -1,7 +1,39 @@
-
 @import url("./variables.scss");
-*, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ant-layout {
+  height: 100vh;
+  background: white;
+}
+
+.ant-layout-sider{
+  padding: 32px;
+}
+
+.ant-menu, .ant-menu-submenu-title {
+    color: var(--gray-2);
+}
+
+.ant-menu .ant-menu-item svg {
+  font-size: 1.1rem !important;
+}
+
+.ant-menu-item-selected {
+  color: white !important;
+
+  & svg path {
+    stroke: white;
+  }
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
